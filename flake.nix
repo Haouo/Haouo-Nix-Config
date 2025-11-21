@@ -24,37 +24,53 @@
     };
   };
 
-  outputs = inputs@{ self, nixpkgs, nixos-wsl, home-manager, nixvim, sops-nix, ... }:
-  let
-    userName = "haouo"; # FIXME - replace it with the actual value
-    hostName = "nixos"; # FIXME - replace it with the actual value
-    wslEnable = false; # FIXME - replace it with the actual value
-    hostSystem = "aarch64-linux"; # FIXME - replace it with the actual value
-  in
-  {
-    # system-wide configuration
-    nixosConfigurations = {
-      nixos = nixpkgs.lib.nixosSystem {
-        system = hostSystem;
-        specialArgs = { inherit userName hostName wslEnable hostSystem };
-        modules = [
-          ./configuration.nix
-          (if wslEnable then nixos-wsl.nixosModules.default else {})
-        ];
+  outputs =
+    {
+      self,
+      nixpkgs,
+      nixos-wsl,
+      home-manager,
+      nixvim,
+      sops-nix,
+      ...
+    }:
+    let
+      userName = "haouo"; # FIXME - replace it with the actual value
+      hostName = "nixos"; # FIXME - replace it with the actual value
+      wslEnable = false; # FIXME - replace it with the actual value
+      hostSystem = "aarch64-linux"; # FIXME - replace it with the actual value
+    in
+    {
+      # system-wide configuration
+      nixosConfigurations = {
+        nixos = nixpkgs.lib.nixosSystem {
+          system = hostSystem;
+          specialArgs = {
+            inherit
+              userName
+              hostName
+              wslEnable
+              hostSystem
+              ;
+          };
+          modules = [
+            ./configuration.nix
+            (if wslEnable then nixos-wsl.nixosModules.default else { })
+          ];
+        };
       };
-    };
 
-    # homeConfigurations with home-manager
-    homeConfigurations = {
-      "${username}" = home-manager.lib.homeManagerConfiguration {
-        pkgs = nixpkgs.legacyPackages.${hostSystem};
-        specialArgs = { inherit userName };
-        modules = [
-          nixvim.homeModules.nixvim
-          sops-nix.homeManagerModules.sops
-          ./home-manager/home.nix
-        ];
+      # homeConfigurations with home-manager
+      homeConfigurations = {
+        "${userName}" = home-manager.lib.homeManagerConfiguration {
+          pkgs = nixpkgs.legacyPackages.${hostSystem};
+          specialArgs = { inherit userName; };
+          modules = [
+            nixvim.homeModules.nixvim
+            sops-nix.homeManagerModules.sops
+            ./home-manager/home.nix
+          ];
+        };
       };
     };
-  };
 }
