@@ -48,7 +48,7 @@
     homeConfigurations = {
       "${username}" = home-manager.lib.homeManagerConfiguration {
         pkgs = nixpkgs.legacyPackages.${hostSystem};
-        specialArgs = { inherit userName hostName wslEnable hostSystem };
+        specialArgs = { inherit userName };
         modules = [
           nixvim.homeModules.nixvim
           sops-nix.homeManagerModules.sops

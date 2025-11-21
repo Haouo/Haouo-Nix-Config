@@ -1,9 +1,14 @@
-{ config, pkgs, ... }:
+{
+  config,
+  pkgs,
+  userName,
+  ...
+}:
 {
   # Home Manager needs a bit of information about you and the paths it should
   # manage.
-  home.username = "haouo";
-  home.homeDirectory = "/Users/haouo";
+  home.username = "${userName}";
+  home.homeDirectory = "/home/${userName}";
 
   # This value determines the Home Manager release that your configuration is
   # compatible with. This helps avoid breakage when a new Home Manager release
@@ -17,22 +22,46 @@
   # The home.packages option allows you to install Nix packages into your
   # environment.
   home.packages = with pkgs; [
-    # # Adds the 'hello' command to your environment. It prints a friendly
-    # # "Hello, world!" when run.
-    # pkgs.hello
     neofetch
-    zip xz unzip
-    ripgrep eza fzf yazi
-    mtr dnsutils
-    which file cowsay tree gnused gnutar gawk zstd gnupg
-    btop 
+    zip
+    xz
+    unzip
+    ripgrep
+    eza
+    fzf
+    yazi
+    mtr
+    dnsutils
+    which
+    file
+    cowsay
+    tree
+    gnused
+    gnutar
+    gawk
+    zstd
+    gnupg
+    btop
     git
-    wget curl
-    gnumake cmake meson ninja
-    vim zellij lazygit glow gnuplot
-    texliveSmall texlab bibtex-tidy
-    typst tinymist typstyle
-    age sops
+    wget
+    curl
+    gnumake
+    cmake
+    meson
+    ninja
+    vim
+    zellij
+    lazygit
+    glow
+    gnuplot
+    texliveSmall
+    texlab
+    bibtex-tidy
+    typst
+    tinymist
+    typstyle
+    age
+    sops
 
     # # It is sometimes useful to fine-tune packages, for example, by applying
     # # overrides. You can do that directly here, just don't forget the
@@ -89,8 +118,8 @@
 
   programs.git = {
     enable = true;
-    settings.user.name = "Haouo";
-    settings.user.email = "q18131500@gs.ncku.edu.tw";
+    settings.user.name = "Haouo"; # FIXME
+    settings.user.email = "q18131500@gs.ncku.edu.tw"; # FIXME
   };
 
   programs.direnv = {
@@ -103,7 +132,7 @@
       vi = "nvim";
       vim = "nvim";
       ll = "ls -al";
-      update = "home-manager switch";
+      hmupdate = "home-manager switch";
     };
   };
 
@@ -115,7 +144,7 @@
   programs.starship = {
     settings = {
       add_newline = true;
-      character  = {
+      character = {
         success_symbol = "[➜](bold green)";
         error_symbol = "[➜](bold red)";
       };
@@ -124,20 +153,17 @@
 
   programs.nixvim = {
     enable = true;
-    opts = {
-      number = true;
-      relativenumber = true;
-      shiftwidth = 2;
-    };
-    colorschemes.base16 = {
-      enable = true;
-      colorscheme = "0x96f";
-    };
+    imports = [
+      ./nvim/nixvim.nix
+    ];
   };
 
-  sops = {  
+  sops = {
     defaultSopsFile = ./secrets/ssh.yaml;
-    age.keyFile = "/Users/haouo/.config/sops/age/keys.txt";
-    secrets.ssh_privkey = {};
+    age.keyFile = "/home/${userName}/.config/sops/age/keys.txt";
+    secrets.ssh_privkey = {
+      mode = "0600";
+      path = "/home/${userName}/.ssh/id_ed25519";
+    };
   };
 }
