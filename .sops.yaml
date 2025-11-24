@@ -2,7 +2,7 @@ keys:
   - &aislab_92529_wsl_nixos_pc age1lg0ungfhhku2pcpegye2wwdylreetw7xaysktgz9enq8sx3lp9cqslu3m9
   - &my_mac_pubkey age13c8xsmppxx9mgtgy5q727uesnha23ytg52a0dr9wth8s4n0l79pqprx72x
   - &nix_temp age1mnw8dv20lk2wpdv5tuq83wpszl0t5q8sxglzhgq8wc9vh6fl5ees0sq3u4
-  - &aislab_eda2 ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIEPuetP/VNbG2ljn2u9OxpcHaWZ1Tpu3FzqAhOTG4W6/ Haouo@eda2-server-aislab-ee-ncku-edu-tw
+  - &aislab_eda2 age1tupp0gqupffwk0f22n5t2skcv3stwywxgxl83sankeghsfal3fvsqjczn7
 creation_rules:
   - path_regex: secrets/[^/]+\.(yaml|json|env|ini)$
     key_groups:
